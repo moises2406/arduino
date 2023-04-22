@@ -1,0 +1,145 @@
+//export
+const bot = require('./app');
+const { Board, Led, Servo, Relay } = bot.JF;
+const io = bot.io;
+const board = new Board();
+
+board.on("ready", () => {
+    io.on('connection', (socket) => {
+        console.log('a user connected');
+
+        socket.on('keypress', (msg) => {
+            const bot = new Bot();
+            console.log(msg);
+            switch (msg) {
+                case 'w':
+                    bot.arranque();
+                    break;
+                case 's':
+                    bot.rebersa();
+                    break;
+                case 'q':
+                    bot.derecha();
+                    break;
+                case 'e':
+                    bot.isquierda();
+                    break;
+                    case '4':
+                    bot.servoDerecha();
+                    break;
+                    case '6':
+                    bot.servoIsquierda();
+                    break;
+                    
+
+                default:
+                    console.log(msg);
+            }
+        });
+        socket.on('keyup', (msg) => {
+            const bot = new Bot();
+            switch (msg) {
+                case 'w':
+                    bot.offArranqueYrebersa()
+                    break;
+                case 's':
+                    bot.offArranqueYrebersa()
+                    break;
+                case 'q':
+                    bot.offDerechaYisquierda()
+                    break;
+                case 'e':
+                    bot.offDerechaYisquierda()
+                    break;
+                    case '4':
+                    bot.servoCenter();
+                    break;
+                    case '6':
+                    bot.servoCenter();
+                    break;
+
+                default:
+                    console.log(msg);
+            }
+        });
+    });
+
+
+    const pin4 = new Relay(4);
+    const pin5 = new Relay(5);
+    const pin6 = new Relay(6);
+    const pin7 = new Relay(7);
+
+    const pin8 = new Relay(8);
+    const pin9 = new Relay(9);
+    const pin10 = new Relay(10);
+    const pin11 = new Relay(11);
+
+    const servo = new Servo.Continuous(13);
+    class Bot {
+        constructor() {
+
+        }
+
+        arranque() {
+
+            pin4.close();
+            pin5.open();
+            pin6.close();
+            pin7.open();
+        }
+
+        rebersa() {
+            pin4.open();
+            pin5.close();
+            pin6.open();
+            pin7.close();
+        }
+        derecha() {
+            pin8.close();
+            pin9.open();
+            pin10.close();
+            pin11.open();
+        }
+        isquierda() {
+            pin8.open();
+            pin9.close();
+            pin10.open();
+            pin11.close();
+        }
+
+        offArranqueYrebersa() {
+            pin4.open();
+            pin5.open();
+            pin6.open();
+            pin7.open();
+        }
+
+        offDerechaYisquierda() {
+            pin8.open();
+            pin9.open();
+            pin10.open();
+            pin11.open();
+        }
+
+        servoDerecha(){
+            servo.cw()
+        }
+        servoIsquierda(){
+            servo.ccw()
+        }
+        servoCenter(){
+            servo.center()
+        }
+
+    }
+})
+
+
+
+
+
+
+module.exports = board;
+
+
